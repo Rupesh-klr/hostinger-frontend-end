@@ -15,6 +15,7 @@ const LoginPage = ({ type, subRoot }) => {
 
     // Handle Google Auth via Popup (as we discussed for cross-domain)
     const handleGoogleLogin = () => {
+        console.log("Initiating Google Login...");
         const width = 500, height = 600;
         const left = window.screenX + (window.outerWidth - width) / 2;
         const top = window.screenY + (window.outerHeight - height) / 2;
@@ -29,6 +30,7 @@ const LoginPage = ({ type, subRoot }) => {
         `width=${width},height=${height},left=${left},top=${top}`
     );
 
+        console.log("opeingin windowsow for google auth:", authUrl);
     // Listen for the "Success" message from the popup
     window.addEventListener("message", (event) => {
         // if (event.origin !== "https://dodgerblue-hare-128861.hostingersite.com") return;
@@ -40,7 +42,12 @@ const LoginPage = ({ type, subRoot }) => {
         //     popup.close();
         //     navigate('/dashboard');
     // }
-        if (!event.data || event.data.type !== "AUTH_SUCCESS") return;
+        if (!event.data || event.data.type !== "AUTH_SUCCESS") {
+            console.log("Received AUTH_SUCCESS from popup:", event.data);
+            return;
+        }
+        console.log("Received AUTH_SUCCESS from popup:------", event.data);
+        popup.close();
 
         // Now 'dispatch' will be recognized
         dispatch(loginUser(event.data.user)); 
@@ -74,6 +81,8 @@ const LoginPage = ({ type, subRoot }) => {
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 required
+                                // Fix for Email Autocomplete
+        autoComplete="username"
                             />
                         </div>
 
@@ -86,6 +95,8 @@ const LoginPage = ({ type, subRoot }) => {
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 required
+                                // Fix for Password Autocomplete
+        autoComplete="current-password"
                             />
                         </div>
 
