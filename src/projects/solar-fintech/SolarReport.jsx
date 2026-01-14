@@ -10,3 +10,4 @@ function SolarReport() {
 
     return <button onClick={handleExport}>Export Solar Data</button>;
 }
+export default SolarReport;

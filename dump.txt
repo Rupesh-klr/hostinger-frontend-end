@@ -1,1 +1,11 @@
 sample files
+profile page link and login page index and singup page index and logout page index that even content default profile pic log where this should be cunstomed in this this where 
+nav bar should visiable in deskptop and in model eit should come with normal formate like linein mobile while it should show all the nav abar detials for login/singup and logout and profile pica nd dispaly anme with 10 chareter in even modile windows 
+
+in sidebar even come with some confiure by user role where that help to show icon and it's tilte and log 
+where when click on. that we need ot navigaute that mainportal/solar-fintect/edtechroute i need to create few other rooute here so that 
+help to navabe to other for two page of configureation by detaulst that showing comming soon text in h1
+we have siderconfiguration where if the user role is 1 and the element compoent contain 1 it should show are display in the dier bar for now
+
+
+
