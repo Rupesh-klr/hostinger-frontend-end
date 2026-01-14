@@ -11,6 +11,7 @@ import Navbar from './common-elements/Navbar';
 import LoginPage from './common-elements/Login';
 import SignupPage from './common-elements/Signup';
 import Sidebar from './common-elements/Sidebar';
+import LocalSetupUserDetails from './common-elements/LocalSetupUserDetails';
 
 // Export everything as a single object or named exports
 export {
@@ -21,5 +22,6 @@ export {
     Navbar,
     Sidebar,
     LoginPage,
-    SignupPage
+    SignupPage,
+    LocalSetupUserDetails
 };

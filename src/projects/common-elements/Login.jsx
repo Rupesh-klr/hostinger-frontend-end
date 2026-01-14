@@ -1,75 +1,98 @@
-// src/projects/auth/LoginPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser } from '../../store/authSlice'; // Ensure this path is correct
+import { loginUser, logoutUser } from '../../store/authSlice'; // ADDED: logoutUser
 import { useNavigate } from 'react-router-dom';
-import { Navbar } from '../'; // Importing from your barrel index.js
-import { apiRequest } from '../../utils/exportUtils';
-import logo from '@/assets/svg/google-icon-logo-svgrepo-com.svg'; // If logo is in src
+import { Navbar } from '../'; 
+import logo from '@/assets/svg/google-icon-logo-svgrepo-com.svg';
 
 const LoginPage = ({ type, subRoot }) => {
-    const dispatch = useDispatch(); // CRITICAL: Initialize dispatch here
-    const { isLoggedIn } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { isLoggedIn } = useSelector((state) => state.auth);
     const [formData, setFormData] = useState({ email: '', password: '' });
 
-    // Handle Google Auth via Popup (as we discussed for cross-domain)
+  console.log("App Component is rendering..-----.");
+//   useEffect(() => {
+//     // This log SHOULD print now
+//     console.log("✅ Setting up message listener for auth popup");
+
+//     const handleMessage = (event) => {
+//       if (event.origin !== "https://dodgerblue-hare-128861.hostingersite.com") return;
+
+//       if (event.data?.type === "AUTH_SUCCESS") {
+//         const user = event.data.user;
+//         const formattedUser = {
+//           ...user,
+//           name: user?.name?.givenName || user?.displayName || "User"
+//         };
+
+//         localStorage.setItem('userInfo', JSON.stringify(formattedUser));
+//         dispatch(loginUser(formattedUser));
+//         navigate('/main-portal');
+//       }
+//     };
+
+//     window.addEventListener("message", handleMessage);
+//     return () => window.removeEventListener("message", handleMessage);
+//   }, [dispatch, navigate]);
+    // SECTION: Cross-Tab Session Sync
+    // useEffect(() => {
+    //     const authChannel = new BroadcastChannel('auth_sync');
+    //     authChannel.onmessage = (event) => {
+    //         console.log("Syncing message received in this tab:", event.data);
+    //         if (event.data.type === 'LOGIN') {
+    //             dispatch(loginUser(event.data.user)); // Syncs Redux
+    //         } else if (event.data.type === 'LOGOUT') {
+    //             dispatch(logoutUser()); // Syncs Logout
+    //         }
+    //     };
+
+    //     return () => authChannel.close();
+    //     // const syncLogout = (event) => {
+    //     //     // Synchronize logout/login across different browser tabs
+    //     //     if (event.key === 'userInfo' && !event.newValue) {
+    //     //         dispatch(logoutUser());
+    //     //         navigate('/login');
+    //     //     }
+    //     //     if (event.key === 'userInfo' && event.newValue) {
+    //     //         dispatch(loginUser(JSON.parse(event.newValue)));
+    //     //     }
+    //     // };
+
+    //     window.addEventListener('storage', syncLogout);
+    //     return () => window.removeEventListener('storage', syncLogout);
+    // }, [dispatch, navigate]);
+
+    // SECTION: Google Auth via Popup
     const handleGoogleLogin = () => {
-        console.log("Initiating Google Login...");
         const width = 500, height = 600;
         const left = window.screenX + (window.outerWidth - width) / 2;
         const top = window.screenY + (window.outerHeight - height) / 2;
         const currentFrontendUrl = window.location.origin;
-// window.open(authUrl, "google-auth", "width=500,height=600");
-        // Open the backend auth in a new window
-        const authUrl =`https://dodgerblue-hare-128861.hostingersite.com/auth/google?origin=${encodeURIComponent(currentFrontendUrl)}&callbackendpoint=/${subRoot}/`;
-    const popup = window.open(
-        authUrl, 
-        "google-auth", 
-        "width=500,height=600,left=100,top=100"
-    );
 
-    if (!popup) {
-        alert("Please allow popups for this website");
-    }
+        // Origin and callback endpoint passed to handle cross-origin redirection
+        const authUrl = `https://dodgerblue-hare-128861.hostingersite.com/auth/google?origin=${encodeURIComponent(currentFrontendUrl)}&callbackendpoint=/${subRoot}/local-setup-userdetails`;
+        console.log("Auth URL:", authUrl);
+        const popup = window.open(authUrl, "google-auth", `width=${width},height=${height},left=${left},top=${top}`);
 
-        console.log("opeingin windowsow for google auth:", authUrl);
-    // Listen for the "Success" message from the popup
-    window.addEventListener("message", (event) => {
-        // if (event.origin !== "https://dodgerblue-hare-128861.hostingersite.com") return;
-
-        // if (event.data.type === "AUTH_SUCCESS") {
-        //     const userData = event.data.user;
-        //     // Update Redux and LocalStorage
-        //     dispatch(loginUser(userData));
-        //     popup.close();
-        //     navigate('/dashboard');
-    // }
-        if (!event.data || event.data.type !== "AUTH_SUCCESS") {
-            console.log("Received AUTH_SUCCESS from popup:", event.data);
+        if (!popup) {
+            alert("Please allow popups for this website");
             return;
         }
-        console.log("Received AUTH_SUCCESS from popup:------", event.data);
-        popup.close();
 
-        // Now 'dispatch' will be recognized
-        dispatch(loginUser(event.data.user)); 
-        navigate('/');
         
-    }, { once: true });
-        // The popup will handle the postMessage to update your state
+        // Safety: ensure listener is removed if the user manually closes the popup
+
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         alert("Email Login is Coming Soon! Please use Google Login.");
     };
-    console.log("LoginPage Rendered with type:", type, "and subRoot:", subRoot);
 
     return (
         <div className="auth-page" style={styles.pageContainer}>
             <Navbar />
-
             <main style={styles.mainContent}>
                 <div style={styles.loginCard}>
                     <h2 style={{ textAlign: 'center' }}>{type} Login</h2>
@@ -85,8 +108,7 @@ const LoginPage = ({ type, subRoot }) => {
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 required
-                                // Fix for Email Autocomplete
-        autoComplete="username"
+                                autoComplete="username" // Browser Best Practice
                             />
                         </div>
 
@@ -99,8 +121,7 @@ const LoginPage = ({ type, subRoot }) => {
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 required
-                                // Fix for Password Autocomplete
-        autoComplete="current-password"
+                                autoComplete="current-password" // Browser Best Practice
                             />
                         </div>
 
@@ -115,12 +136,9 @@ const LoginPage = ({ type, subRoot }) => {
                         <span style={styles.dividerLine}></span>
                     </div>
 
-                    <div style={{justifyContent: 'center',  display: 'flex'}} >
-
-                        {/* Google Login Button */}
+                    <div style={{justifyContent: 'center', display: 'flex'}} >
                         <button onClick={handleGoogleLogin} style={styles.googleBtn}>
-                            <img src={logo}
-                                alt="Google" width="50" height="50" style={{ marginRight: '10px' }} />
+                            <img src={logo} alt="Google" width="30" height="30" style={{ marginRight: '10px' }} />
                             Sign in with Google
                         </button>
                     </div>
@@ -133,7 +151,6 @@ const LoginPage = ({ type, subRoot }) => {
         </div>
     );
 };
-
 const styles = {
     pageContainer: { display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#f4f7f6' },
     mainContent: { flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' },

@@ -42,6 +42,7 @@ export const apiRequest = async (endpoint, method = 'GET', body = null) => {
             'Content-Type': 'application/json',
             // Add Authorization headers here if needed
         },
+        credentials: 'include' // Include cookies for session management
     };
 
     if (body) {
