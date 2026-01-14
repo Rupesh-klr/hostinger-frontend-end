@@ -24,12 +24,14 @@ const LoginPage = ({ type, subRoot }) => {
         // Open the backend auth in a new window
         const authUrl =`https://dodgerblue-hare-128861.hostingersite.com/auth/google?origin=${encodeURIComponent(currentFrontendUrl)}`;
     const popup = window.open(
-        // "https://dodgerblue-hare-128861.hostingersite.com/auth/google",
-        authUrl,
-        "google-auth",
-        "width=500,height=600"
-        // `width=${width},height=${height}`
+        authUrl, 
+        "google-auth", 
+        "width=500,height=600,left=100,top=100"
     );
+
+    if (!popup) {
+        alert("Please allow popups for this website");
+    }
 
         console.log("opeingin windowsow for google auth:", authUrl);
     // Listen for the "Success" message from the popup
@@ -52,7 +54,7 @@ const LoginPage = ({ type, subRoot }) => {
 
         // Now 'dispatch' will be recognized
         dispatch(loginUser(event.data.user)); 
-        navigate('/dashboard');
+        navigate('/');
         
     }, { once: true });
         // The popup will handle the postMessage to update your state
