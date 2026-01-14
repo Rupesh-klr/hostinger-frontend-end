@@ -7,6 +7,7 @@ import { apiRequest } from '../../utils/exportUtils';
 import logo from '@/assets/svg/google-icon-logo-svgrepo-com.svg'; // If logo is in src
 
 const LoginPage = ({ type, subRoot }) => {
+    const dispatch = useDispatch(); // CRITICAL: Initialize dispatch here
     const { isLoggedIn } = useSelector((state) => state.auth);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -16,25 +17,34 @@ const LoginPage = ({ type, subRoot }) => {
         const width = 500, height = 600;
         const left = window.screenX + (window.outerWidth - width) / 2;
         const top = window.screenY + (window.outerHeight - height) / 2;
-
+        const currentFrontend = window.location.origin;
+// window.open(authUrl, "google-auth", "width=500,height=600");
         // Open the backend auth in a new window
+        const authUrl = `https://dodgerblue-hare-128861.hostingersite.com/auth/google?origin=${currentFrontend}`;
     const popup = window.open(
-        "https://dodgerblue-hare-128861.hostingersite.com/auth/google",
+        // "https://dodgerblue-hare-128861.hostingersite.com/auth/google",
+        authUrl,
         "google-auth",
         `width=${width},height=${height},left=${left},top=${top}`
     );
 
     // Listen for the "Success" message from the popup
     window.addEventListener("message", (event) => {
-        if (event.origin !== "https://dodgerblue-hare-128861.hostingersite.com") return;
+        // if (event.origin !== "https://dodgerblue-hare-128861.hostingersite.com") return;
 
-        if (event.data.type === "AUTH_SUCCESS") {
-            const userData = event.data.user;
-            // Update Redux and LocalStorage
-            dispatch(loginUser(userData));
-            popup.close();
-            navigate('/dashboard');
-        }
+        // if (event.data.type === "AUTH_SUCCESS") {
+        //     const userData = event.data.user;
+        //     // Update Redux and LocalStorage
+        //     dispatch(loginUser(userData));
+        //     popup.close();
+        //     navigate('/dashboard');
+    // }
+        if (!event.data || event.data.type !== "AUTH_SUCCESS") return;
+
+        // Now 'dispatch' will be recognized
+        dispatch(loginUser(event.data.user)); 
+        navigate('/dashboard');
+        
     }, { once: true });
         // The popup will handle the postMessage to update your state
     };
