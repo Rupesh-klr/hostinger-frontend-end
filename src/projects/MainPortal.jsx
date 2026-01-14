@@ -86,17 +86,6 @@ const MainPortal = () => {
                             </div>
                         </div>
                     </div>
-
-                    {/* SECTION 3: FOOTER */}
-                    <footer style={{
-                        marginTop: 'auto', // Sticks to the bottom
-                        padding: '20px 0',
-                        borderTop: '1px solid #ddd',
-                        textAlign: 'center',
-                        color: '#777'
-                    }}>
-                        copyright at rupesh
-                    </footer>
                 </main>
             </div>
              <footer style={{

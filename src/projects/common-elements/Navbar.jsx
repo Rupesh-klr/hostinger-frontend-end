@@ -2,6 +2,13 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
+const Nav_default_config = {
+    logingPageEndpoint: '/main-portal/login',
+    signupPageEndpoint: '/main-portal/signup',
+    profilePageEndpoint: '/main-portal/profile',
+    homePgeEndpoint: '/',
+    logoSrc: '/logo-VR.svg',
+};
 
 const Navbar = () => {
     const { isLoggedIn, userInfo } = useSelector((state) => state.auth);
@@ -32,7 +39,7 @@ const Navbar = () => {
     return (
         <nav className="global-navbar" style={styles.nav}>
             <div className="nav-brand">
-                <Link to="/"><img src="/logo-VR.svg" width="35" alt="Logo" /></Link>
+                <Link to={Nav_default_config.homePgeEndpoint}><img src={Nav_default_config.logoSrc} width="35" alt="Logo" /></Link>
             </div>
 
                 <div className="nav-context" style={styles.navMiddle}>
@@ -46,7 +53,7 @@ const Navbar = () => {
             <div className={`nav-links nav-links-login-singnup ${isMobileMenuOpen ? 'open' : ''}`}>
                 {isLoggedIn ? (
                     <div style={styles.userSection}>
-                        <Link to="/profile">
+                        <Link to={Nav_default_config.profilePageEndpoint}>
                             <img src={userInfo?.profilePic || '/default-avatar.png'} 
                                  style={styles.avatar} alt="Profile" />
                         </Link>
@@ -56,8 +63,8 @@ const Navbar = () => {
                     </div>
                 ) : (
                     <>
-                        <button onClick={() => navigate('/login')} style={styles.clickBtn}>Login</button>
-                        <button onClick={() => navigate('/signup')} style={styles.clickBtn}>Sign Up</button>
+                        <button onClick={() => navigate(Nav_default_config.logingPageEndpoint)} style={styles.clickBtn}>Login</button>
+                        <button onClick={() => navigate(Nav_default_config.signupPageEndpoint)} style={styles.clickBtn}>Sign Up</button>
                     </>
                 )}
             </div>
