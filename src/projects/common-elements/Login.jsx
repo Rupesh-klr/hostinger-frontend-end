@@ -22,12 +22,13 @@ const LoginPage = ({ type, subRoot }) => {
         const currentFrontend = window.location.origin;
 // window.open(authUrl, "google-auth", "width=500,height=600");
         // Open the backend auth in a new window
-        const authUrl = `https://dodgerblue-hare-128861.hostingersite.com/auth/google?origin=${currentFrontend}`;
+        const authUrl =`https://dodgerblue-hare-128861.hostingersite.com/auth/google?origin=${encodeURIComponent(currentFrontendUrl)}`;
     const popup = window.open(
         // "https://dodgerblue-hare-128861.hostingersite.com/auth/google",
         authUrl,
         "google-auth",
-        `width=${width},height=${height},left=${left},top=${top}`
+        "width=500,height=600"
+        // `width=${width},height=${height}`
     );
 
         console.log("opeingin windowsow for google auth:", authUrl);
@@ -61,6 +62,7 @@ const LoginPage = ({ type, subRoot }) => {
         e.preventDefault();
         alert("Email Login is Coming Soon! Please use Google Login.");
     };
+    console.log("LoginPage Rendered with type:", type, "and subRoot:", subRoot);
 
     return (
         <div className="auth-page" style={styles.pageContainer}>
