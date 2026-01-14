@@ -19,7 +19,7 @@ const LoginPage = ({ type, subRoot }) => {
         const width = 500, height = 600;
         const left = window.screenX + (window.outerWidth - width) / 2;
         const top = window.screenY + (window.outerHeight - height) / 2;
-        const currentFrontend = window.location.origin;
+        const currentFrontendUrl = window.location.origin;
 // window.open(authUrl, "google-auth", "width=500,height=600");
         // Open the backend auth in a new window
         const authUrl =`https://dodgerblue-hare-128861.hostingersite.com/auth/google?origin=${encodeURIComponent(currentFrontendUrl)}`;
