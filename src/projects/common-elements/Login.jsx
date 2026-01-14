@@ -22,7 +22,7 @@ const LoginPage = ({ type, subRoot }) => {
         const currentFrontendUrl = window.location.origin;
 // window.open(authUrl, "google-auth", "width=500,height=600");
         // Open the backend auth in a new window
-        const authUrl =`https://dodgerblue-hare-128861.hostingersite.com/auth/google?origin=${encodeURIComponent(currentFrontendUrl)}`;
+        const authUrl =`https://dodgerblue-hare-128861.hostingersite.com/auth/google?origin=${encodeURIComponent(currentFrontendUrl)}&callbackendpoint=/${subRoot}/`;
     const popup = window.open(
         authUrl, 
         "google-auth", 

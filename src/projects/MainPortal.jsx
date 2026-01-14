@@ -86,17 +86,44 @@ const MainPortal = () => {
                             </div>
                         </div>
                     </div>
+                    {/* SECTION 3: CARDS VIEW AREA */}
+                    <div style={styles.apiActionsContainer}>
+                        <button
+                            style={styles.apiBtn}
+                            onClick={() => apiRequest('/', 'GET')}
+                        >
+                            Check Server Status
+                        </button>
+
+                        <button
+                            style={styles.apiBtn}
+                            onClick={async () => {
+                                const data = await apiRequest('/api/current_user', 'GET');
+                                console.log("Current User Data:", data);
+                                alert(`User: ${data?.displayName || 'Not Logged In'}`);
+                            }}
+                        >
+                            Get Current User
+                        </button>
+
+                        <button
+                            style={{ ...styles.apiBtn, backgroundColor: '#e74c3c' }}
+                            onClick={handleLogout} // Uses your existing logout logic
+                        >
+                            Logout Session
+                        </button>
+                    </div>
                 </main>
             </div>
-             <footer style={{
-                        marginTop: 'auto', // Sticks to the bottom
-                        padding: '20px 0',
-                        borderTop: '1px solid #ddd',
-                        textAlign: 'center',
-                        color: '#777'
-                    }}>
-                        copyright at rupesh
-                    </footer>
+            <footer style={{
+                marginTop: 'auto', // Sticks to the bottom
+                padding: '20px 0',
+                borderTop: '1px solid #ddd',
+                textAlign: 'center',
+                color: '#777'
+            }}>
+                copyright at rupesh
+            </footer>
         </div>
     );
 };
@@ -111,7 +138,24 @@ const styles = {
     header: { textAlign: 'center', margin: '40px 0' },
     dashboard: { display: 'flex', justifyContent: 'center', padding: '20px' },
     card: { width: '300px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)', overflow: 'hidden', border: '1px solid #ddd' },
-    cardImg: { width: '100%', height: '180px', objectFit: 'cover' }
+    cardImg: { width: '100%', height: '180px', objectFit: 'cover' },
+    apiActionsContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '15px',
+        marginBottom: '30px',
+        padding: '10px'
+    },
+    apiBtn: {
+        backgroundColor: '#34495e',
+        color: 'white',
+        border: 'none',
+        padding: '10px 20px',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '0.9rem',
+        transition: 'opacity 0.2s'
+    },
 };
 
 export default MainPortal;
