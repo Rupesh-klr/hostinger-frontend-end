@@ -1,6 +1,7 @@
 // src/projects/auth/LoginPage.jsx
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { loginUser } from '../../store/authSlice'; // Ensure this path is correct
 import { useNavigate } from 'react-router-dom';
 import { Navbar } from '../'; // Importing from your barrel index.js
 import { apiRequest } from '../../utils/exportUtils';
